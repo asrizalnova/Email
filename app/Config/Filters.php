@@ -19,31 +19,51 @@ class Filters extends BaseConfig
      *                                                     or [filter_name => [classname1, classname2, ...]]
      */
     public array $aliases = [
-        'csrf'          => CSRF::class,
-        'toolbar'       => DebugToolbar::class,
-        'honeypot'      => Honeypot::class,
-        'invalidchars'  => InvalidChars::class,
-        'secureheaders' => SecureHeaders::class,
-    ];
+    'csrf'          => CSRF::class,
+    'toolbar'       => DebugToolbar::class,
+    'honeypot'      => Honeypot::class,
+    'invalidchars'  => InvalidChars::class,
+    'secureheaders' => SecureHeaders::class,
+    'filterAdmin'   => \App\Filters\FilterAdmin::class,
+    'filterDivisi'  => \App\Filters\FilterDivisi::class,
+    'filterPimpinan' => \App\Filters\FilterPimpinan::class,
+    'filterSekretaris' => \App\Filters\FilterSekretaris::class
+];
 
-    /**
-     * List of filter aliases that are always
-     * applied before and after every request.
-     *
-     * @var array<string, array<string, array<string, string>>>|array<string, list<string>>
-     */
-    public array $globals = [
-        'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+public array $globals = [
+    'before' => [
+        'filterAdmin' => [
+            'except' => ['login/*', '/', 'search/*']
         ],
-        'after' => [
-            'toolbar',
-            // 'honeypot',
-            // 'secureheaders',
+        'filterDivisi' => [
+            'except' => ['login/*', '/', 'search/*']
         ],
-    ];
+        'filterPimpinan' => [
+            'except' => ['login/*', '/', 'admin/dashboard', 'search/*']
+        ],
+        'filterSekretaris' => [
+            'except' => ['login/*', '/', 'search/*']
+        ],
+    ],
+    'after' => [
+        'filterAdmin' => [
+            'except' => ['login/*', 'admin/dashboard', 'admin/dashboard/*', 'admin/slider/*', 'admin/produk/*', 'admin/email*', 'admin/divisi*', 'admin/pimpinan*']
+        ],
+        'filterDivisi' => [
+            'except' => ['login/*', 'admin/dashboard', 'admin/dashboard/*', 'admin/user/*', 'admin/email*', 'admin/divisi*']
+        ],
+        'filterPimpinan' => [
+            'except' => ['login/*', 'admin/dashboard', 'admin/pimpinan/*']
+        ],
+        'filterSekretaris' => [
+            'except' => ['login/*', 'admin/dashboard', 'admin/divisi/*', 'admin/pimpinan/*']
+        ],
+        'toolbar'
+    ],
+];
+
+    
+    
 
     /**
      * List of filter aliases that works on a
